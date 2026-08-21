@@ -1,7 +1,12 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 # Create your models here.
 #Django ORM - Crear
 
+def validar_precio_positivo(value):
+    if value <= 0:
+        raise ValidationError('El precio debe ser un número mayor a cero.')
+    
 class Producto(models.Model):
     CATEGORIAS = [
         ('BEBIDA', 'Bebida'),
@@ -13,6 +18,9 @@ class Producto(models.Model):
     categoria = models.CharField(max_length=10, choices=CATEGORIAS)
     disponible = models.BooleanField(default=True)
 
+# Soporte para archivos multimedia (Media Files)
+    imagen = models.ImageField(upload_to='productos/', null=True, blank=True)
+    
     def __str__(self):
         return f"{self.nombre} - ${self.precio}"
 
